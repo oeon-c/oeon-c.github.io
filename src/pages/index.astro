@@ -34,6 +34,7 @@ const categories = [
         <section class="intro" aria-labelledby="intro-title">
 			<p class="eyebrow">oeon</p>
 			<h1 id="intro-title"><span class="accent-text">oeon</span>의 블로그</h1>
+			<span class="cheese-icon" aria-hidden="true">🧀</span>
 		  </section>
 
 		  <section class="about" id="about" aria-labelledby="about-title">
@@ -80,6 +81,14 @@ const categories = [
 
 .accent-text {
   color: var(--accent-purple);
+}
+
+.cheese-icon {
+  display: inline-block;
+  margin-top: 24px;
+  font-size: 36px;
+  line-height: 1;
+  filter: hue-rotate(205deg) saturate(1.5);
 }
 
 .about .eyebrow {
