@@ -123,7 +123,7 @@ nav {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 12px 20px;
+  gap: 12px 32px;
 }
 
 nav a{
@@ -153,11 +153,22 @@ nav a{
   transition: opacity 160ms ease, transform 160ms ease, visibility 160ms;
 }
 
+.category-cheese {
+  opacity: 1;
+  transition: opacity 160ms ease, transform 160ms ease;
+}
+
 nav a:hover .category-name,
 nav a:focus-visible .category-name {
   opacity: 1;
   visibility: visible;
   transform: translate(-50%, 0);
+}
+
+nav a:hover .category-cheese,
+nav a:focus-visible .category-cheese {
+  opacity: 0;
+  transform: scale(0.7);
 }
 
 .site-footer a {
