@@ -1,19 +1,31 @@
 ---
 const categories = [
-  { id: "development", name: "개발" },
-  { id: "ctf", name: "CTF/Wargame" },
-  { id: "bug-bounty", name: "Bug Bounty" },
-  { id: "tech-writing", name: "블로그/기술문서" },
-  { id: "papers", name: "논문/컨퍼런스" },
-  { id: "contests", name: "공모전/자격증" },
+  { name: "홈", href: "/", home: true },
+  { name: "개발", href: "/development/" },
+  { name: "CTF/Wargame", href: "/ctf/" },
+  { name: "Bug Bounty", href: "/bug-bounty/" },
+  { name: "블로그/기술문서", href: "/tech-writing/" },
+  { name: "논문/컨퍼런스", href: "/papers/" },
+  { name: "공모전/자격증", href: "/contests/" },
+  { name: "맨 위로", href: "#top" },
 ];
 ---
 
 <header id="top" class="site-header">
-  <nav aria-label="블로그 카테고리">
+  <nav aria-label="블로그 메뉴">
     {categories.map((category) => (
-      <a href={`/${category.id}/`} aria-label={category.name}>
-        <span class="category-cheese" aria-hidden="true">🧀</span>
+      <a
+        href={category.href}
+        aria-label={category.name}
+        class:list={{ "home-link": category.home }}
+      >
+        <span
+          class:list={[
+            "category-cheese",
+            { "large-cheese": category.home },
+          ]}
+          aria-hidden="true"
+        >🧀</span>
         <span class="category-name">{category.name}</span>
       </a>
     ))}
@@ -27,17 +39,21 @@ const categories = [
 
   .site-header {
     min-height: 76px;
+    padding: 8px 24px;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     border-bottom: 1px solid #c8c8c8;
   }
 
   nav {
+    width: min(100%, 1200px);
+    margin: 0 auto;
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
-    gap: 12px 32px;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px 20px;
   }
 
   nav a {
@@ -50,12 +66,21 @@ const categories = [
     text-decoration: none;
   }
 
+  .home-link {
+    min-width: 52px;
+    min-height: 52px;
+  }
+
   .category-cheese {
     display: block;
     font-size: 30px;
     line-height: 1;
     filter: hue-rotate(205deg) saturate(1.5);
     transition: opacity 160ms ease, transform 160ms ease;
+  }
+
+  .large-cheese {
+    font-size: 48px;
   }
 
   .category-name {
@@ -85,5 +110,20 @@ const categories = [
   nav a:focus-visible .category-cheese {
     opacity: 0;
     transform: scale(0.7);
+  }
+
+  :global(html) {
+    scroll-behavior: smooth;
+  }
+
+  @media (max-width: 600px) {
+    .site-header {
+      padding: 8px 16px;
+    }
+
+    nav {
+      justify-content: center;
+      gap: 12px 20px;
+    }
   }
 </style>
