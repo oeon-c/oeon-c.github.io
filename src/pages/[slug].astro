@@ -1,0 +1,78 @@
+---
+import CategoryNav from "../components/CategoryNav.astro";
+import { posts } from "../posts.js";
+
+export function getStaticPaths() {
+  return posts.map((post) => ({ params: { slug: post.slug }, props: { post } }));
+}
+
+const { post } = Astro.props;
+---
+
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={post.content.slice(0, 150)} />
+    <title>{post.title} | oeon의 블로그</title>
+  </head>
+  <body>
+    <CategoryNav />
+    <main class="post-page">
+      <a class="back-link" href={`/${post.categoryId}/`}>← 이전</a>
+      <h1>{post.title}</h1>
+      <article class="post-body">
+        {post.content.split(/\n\n+/).map((paragraph) => <p>{paragraph}</p>)}
+      </article>
+    </main>
+  </body>
+</html>
+
+<style>
+  :global(*) {
+    box-sizing: border-box;
+  }
+
+  :global(body) {
+    margin: 0;
+    background: #fff;
+    color: #202124;
+    font-family: system-ui, "Noto Sans KR", sans-serif;
+    line-height: 1.7;
+  }
+
+  .post-page {
+    width: min(100% - 40px, 760px);
+    min-height: calc(100vh - 76px);
+    margin: 0 auto;
+    padding: 40px 0 100px;
+  }
+
+  .back-link {
+    display: inline-block;
+    margin-bottom: 30px;
+    color: #543e8b;
+    text-decoration: none;
+  }
+
+  .back-link:hover,
+  .back-link:focus-visible {
+    text-decoration: underline;
+  }
+
+  h1 {
+    margin: 0 0 56px;
+    font-size: clamp(32px, 6vw, 52px);
+    line-height: 1.25;
+  }
+
+  .post-body {
+    max-width: 680px;
+    margin: 0 auto;
+    font-size: 17px;
+  }
+
+  .post-body p {
+    margin: 0 0 24px;
+  }
+</style>
