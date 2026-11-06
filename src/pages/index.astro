@@ -33,8 +33,19 @@ const categories = [
       <main>
         <section class="intro" aria-labelledby="intro-title">
 			<p class="eyebrow">oeon</p>
-			<h1 id="intro-title"><span class="accent-text">oeon</span>의 블로그</h1>
-			<span class="cheese-icon" aria-hidden="true">🧀</span>
+			<div class="title-orbit">
+			  <div class="cheese-ring" aria-hidden="true">
+				<span class="cheese cheese-top">🧀</span>
+				<span class="cheese cheese-top-right">🧀</span>
+				<span class="cheese cheese-right">🧀</span>
+				<span class="cheese cheese-bottom-right">🧀</span>
+				<span class="cheese cheese-bottom">🧀</span>
+				<span class="cheese cheese-bottom-left">🧀</span>
+				<span class="cheese cheese-left">🧀</span>
+				<span class="cheese cheese-top-left">🧀</span>
+			  </div>
+			  <h1 id="intro-title"><span class="accent-text">oeon</span>의 블로그</h1>
+			</div>
 		  </section>
 
 		  <section class="about" id="about" aria-labelledby="about-title">
@@ -83,12 +94,69 @@ const categories = [
   color: var(--accent-purple);
 }
 
-.cheese-icon {
-  display: inline-block;
-  margin-top: 24px;
-  font-size: 36px;
+.title-orbit {
+  position: relative;
+  width: min(86vw, 460px);
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+}
+
+.cheese-ring {
+  position: absolute;
+  inset: 0;
+}
+
+.cheese {
+  position: absolute;
+  display: block;
+  font-size: 28px;
   line-height: 1;
   filter: hue-rotate(205deg) saturate(1.5);
+}
+
+.cheese-top {
+  top: 1%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.cheese-top-right {
+  top: 14%;
+  right: 14%;
+}
+
+.cheese-right {
+  top: 50%;
+  right: 1%;
+  transform: translateY(-50%);
+}
+
+.cheese-bottom-right {
+  right: 14%;
+  bottom: 14%;
+}
+
+.cheese-bottom {
+  bottom: 1%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.cheese-bottom-left {
+  bottom: 14%;
+  left: 14%;
+}
+
+.cheese-left {
+  top: 50%;
+  left: 1%;
+  transform: translateY(-50%);
+}
+
+.cheese-top-left {
+  top: 14%;
+  left: 14%;
 }
 
 .about .eyebrow {
