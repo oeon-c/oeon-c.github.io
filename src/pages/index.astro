@@ -19,9 +19,18 @@ import PostSearch from "../components/PostSearch.astro";
     <div class="page">
       <main>
         <section class="intro" aria-labelledby="intro-title">
-			<p class="eyebrow">oeon</p>
-			<h1 id="intro-title"><span class="accent-text">oeon</span>의 블로그</h1>
-			<span class="cheese-icon" aria-hidden="true">🧀</span>
+			<div class="hero-heading">
+			  <p class="eyebrow">oeon</p>
+			  <h1 id="intro-title"><span class="accent-text">oeon</span>의 블로그</h1>
+			  <button class="cheese-trigger" type="button" aria-expanded="false" aria-controls="hero-search" aria-label="게시글 검색 열기">
+				<span class="cheese-icon" aria-hidden="true">🧀</span>
+			  </button>
+			</div>
+			<div class="hero-search" id="hero-search" inert>
+			  <div class="hero-search-inner">
+				<PostSearch compact />
+			  </div>
+			</div>
 		  </section>
 
 		  <section class="about" id="about" aria-labelledby="about-title">
@@ -29,7 +38,7 @@ import PostSearch from "../components/PostSearch.astro";
 			<h2 id="about-title">안녕하세요, <span class="accent-text">oeon</span>입니다.</h2>
 			<p>소속: 이화여자대학교</p>
 			<p>전공: 사이버보안/철학</p>
-			<p>mail: christinakimdoy@gmail.com</span></p>
+			<p>mail: christinakimdoy@gmail.com</p>
 			<a
 			  class="github-link"
 			  href="https://github.com/oeon-c"
@@ -44,7 +53,6 @@ import PostSearch from "../components/PostSearch.astro";
 			</a>
 		  </section>
 
-		  <PostSearch />
 	  </main>
 
       <footer class="site-footer">
@@ -53,6 +61,29 @@ import PostSearch from "../components/PostSearch.astro";
     </div>
   </body>
 </html>
+
+<script>
+  const intro = document.querySelector(".intro");
+  const cheeseTrigger = document.querySelector(".cheese-trigger");
+  const heroSearch = document.querySelector("#hero-search");
+
+  if (intro instanceof HTMLElement && cheeseTrigger instanceof HTMLButtonElement && heroSearch instanceof HTMLElement) {
+    cheeseTrigger.addEventListener("click", () => {
+      const isOpen = intro.classList.toggle("search-open");
+      cheeseTrigger.setAttribute("aria-expanded", String(isOpen));
+      cheeseTrigger.setAttribute("aria-label", isOpen ? "게시글 검색 닫기" : "게시글 검색 열기");
+      heroSearch.inert = !isOpen;
+
+      if (isOpen) {
+        window.setTimeout(() => {
+          if (intro.classList.contains("search-open")) {
+            heroSearch.querySelector("input")?.focus({ preventScroll: true });
+          }
+        }, window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 400);
+      }
+    });
+  }
+</script>
 
 <style>
 :global(*) {
@@ -89,8 +120,22 @@ import PostSearch from "../components/PostSearch.astro";
   filter: hue-rotate(205deg) saturate(1.5);
 }
 
-.cheese-icon {
+.cheese-trigger {
   margin-top: 90px;
+  padding: 6px;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  transition: margin-top 500ms ease;
+}
+
+.cheese-trigger:focus-visible {
+  outline: 2px solid var(--accent-purple);
+  outline-offset: 6px;
+  border-radius: 8px;
+}
+
+.cheese-icon {
   font-size: 50px;
 }
 
@@ -134,6 +179,38 @@ import PostSearch from "../components/PostSearch.astro";
   padding: 80px 0;
 }
 
+.hero-heading {
+  transition: transform 500ms ease;
+}
+
+.hero-search {
+  display: grid;
+  grid-template-rows: 0fr;
+  width: 100%;
+  opacity: 0;
+  transform: translateY(24px);
+  transition: grid-template-rows 500ms ease, opacity 400ms ease, transform 500ms ease;
+}
+
+.hero-search-inner {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.intro.search-open .hero-heading {
+  transform: translateY(-24px);
+}
+
+.intro.search-open .cheese-trigger {
+  margin-top: 52px;
+}
+
+.intro.search-open .hero-search {
+  grid-template-rows: 1fr;
+  opacity: 1;
+  transform: translateY(0);
+}
+
 .intro h1 {
   margin: 0;
   font-size: clamp(36px, 7.5vw, 64px);
@@ -158,6 +235,14 @@ import PostSearch from "../components/PostSearch.astro";
   .about {
     min-height: 100svh;
     padding: 64px 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-heading,
+  .cheese-trigger,
+  .hero-search {
+    transition: none;
   }
 }
 </style>

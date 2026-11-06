@@ -1,8 +1,9 @@
 ---
 import { posts } from "../posts.js";
+const { compact = false } = Astro.props;
 ---
 
-<section class="post-search" aria-labelledby="search-title">
+<section class:list={["post-search", { compact }]} aria-labelledby="search-title">
   <div class="search-shell">
     <p class="eyebrow">ALL POSTS</p>
     <h2 id="search-title">게시글 검색</h2>
@@ -77,6 +78,26 @@ import { posts } from "../posts.js";
     padding: clamp(96px, 15vh, 160px) 24px 120px;
     overflow: hidden;
     text-align: center;
+  }
+
+  .post-search.compact {
+    min-height: 0;
+    padding: 30px 20px 50px;
+    overflow: visible;
+  }
+
+  .post-search.compact .eyebrow,
+  .post-search.compact .search-description {
+    display: none;
+  }
+
+  .post-search.compact h2 {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    white-space: nowrap;
+    clip-path: inset(50%);
   }
 
   .search-shell {
