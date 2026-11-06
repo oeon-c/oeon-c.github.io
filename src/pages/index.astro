@@ -1,12 +1,5 @@
 ---
-const categories = [
-  { id: "development", name: "개발" },
-  { id: "ctf", name: "CTF/Wargame" },
-  { id: "bug-bounty", name: "Bug Bounty" },
-  { id: "tech-writing", name: "블로그/기술문서" },
-  { id: "papers", name: "논문/컨퍼런스" },
-  { id: "contests", name: "공모전/자격증" },
-];
+import CategoryNav from "../components/CategoryNav.astro";
 ---
 
 <html lang="ko">
@@ -21,18 +14,8 @@ const categories = [
   </head>
 
   <body>
+    <CategoryNav />
     <div class="page">
-		<header id="top" class="site-header">
-			<nav aria-label="블로그 카테고리">
-			  {categories.map((category) => (
-				<a href={`/${category.id}/`} aria-label={category.name}>
-				  <span class="category-cheese" aria-hidden="true">🧀</span>
-				  <span class="category-name">{category.name}</span>
-				</a>
-			  ))}
-			</nav>
-		  </header>
-
       <main>
         <section class="intro" aria-labelledby="intro-title">
 			<p class="eyebrow">oeon</p>
@@ -86,8 +69,7 @@ const categories = [
   color: var(--accent-purple);
 }
 
-.cheese-icon,
-.category-cheese {
+.cheese-icon {
   display: block;
   line-height: 1;
   filter: hue-rotate(205deg) saturate(1.5);
@@ -98,10 +80,6 @@ const categories = [
   font-size: 50px;
 }
 
-.category-cheese {
-  font-size: 30px;
-}
-
 .about .eyebrow {
   color: #777;
 }
@@ -109,66 +87,6 @@ const categories = [
 .page {
   width: min(100% - 40px, 760px);
   margin: 0 auto;
-}
-
-.site-header {
-  min-height: 76px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-bottom: 1px solid #c8c8c8;
-}
-
-nav {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 12px 32px;
-}
-
-nav a{
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 32px;
-  min-height: 28px;
-  text-decoration: none;
-}
-
-.category-name {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  z-index: 10;
-  padding: 4px 8px;
-  border-radius: 6px;
-  background: #fff;
-  color: var(--accent-purple);
-  font-size: 13px;
-  white-space: nowrap;
-  opacity: 0;
-  visibility: hidden;
-  transform: translate(-50%, -50%);
-  transition: opacity 160ms ease, transform 160ms ease, visibility 160ms;
-}
-
-.category-cheese {
-  opacity: 1;
-  transition: opacity 160ms ease, transform 160ms ease;
-}
-
-nav a:hover .category-name,
-nav a:focus-visible .category-name {
-  opacity: 1;
-  visibility: visible;
-  transform: translate(-50%, -50%);
-}
-
-nav a:hover .category-cheese,
-nav a:focus-visible .category-cheese {
-  opacity: 0;
-  transform: scale(0.7);
 }
 
 .site-footer a {

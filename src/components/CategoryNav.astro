@@ -1,0 +1,89 @@
+---
+const categories = [
+  { id: "development", name: "개발" },
+  { id: "ctf", name: "CTF/Wargame" },
+  { id: "bug-bounty", name: "Bug Bounty" },
+  { id: "tech-writing", name: "블로그/기술문서" },
+  { id: "papers", name: "논문/컨퍼런스" },
+  { id: "contests", name: "공모전/자격증" },
+];
+---
+
+<header id="top" class="site-header">
+  <nav aria-label="블로그 카테고리">
+    {categories.map((category) => (
+      <a href={`/${category.id}/`} aria-label={category.name}>
+        <span class="category-cheese" aria-hidden="true">🧀</span>
+        <span class="category-name">{category.name}</span>
+      </a>
+    ))}
+  </nav>
+</header>
+
+<style>
+  :global(:root) {
+    --accent-purple: #543e8b;
+  }
+
+  .site-header {
+    min-height: 76px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 1px solid #c8c8c8;
+  }
+
+  nav {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px 32px;
+  }
+
+  nav a {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 32px;
+    min-height: 34px;
+    text-decoration: none;
+  }
+
+  .category-cheese {
+    display: block;
+    font-size: 30px;
+    line-height: 1;
+    filter: hue-rotate(205deg) saturate(1.5);
+    transition: opacity 160ms ease, transform 160ms ease;
+  }
+
+  .category-name {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 10;
+    padding: 4px 8px;
+    border-radius: 6px;
+    background: #fff;
+    color: var(--accent-purple);
+    font-size: 13px;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transform: translate(-50%, -50%);
+    transition: opacity 160ms ease, visibility 160ms;
+  }
+
+  nav a:hover .category-name,
+  nav a:focus-visible .category-name {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  nav a:hover .category-cheese,
+  nav a:focus-visible .category-cheese {
+    opacity: 0;
+    transform: scale(0.7);
+  }
+</style>
