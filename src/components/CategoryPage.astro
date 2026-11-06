@@ -24,7 +24,6 @@ const categoryPosts = posts.filter((post) => post.categoryId === categoryId);
           {categoryPosts.map((post) => (
             <article class="post-card" id={`post-${post.slug}`}>
               {post.isSample && <span class="sample-label">테스트 게시글</span>}
-              <h2>{post.title}</h2>
               <p class="post-preview">{post.content}</p>
             </article>
           ))}
