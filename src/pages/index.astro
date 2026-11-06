@@ -25,9 +25,9 @@ const categories = [
 		<header id="top" class="site-header">
 			<nav aria-label="블로그 카테고리">
 			  {categories.map((category) => (
-				<a href={`/${category.id}/`}>
+				<a href={`/${category.id}/`} aria-label={category.name}>
 				  <span class="category-cheese" aria-hidden="true">🧀</span>
-				  <span>{category.name}</span>
+				  <span class="category-name">{category.name}</span>
 				</a>
 			  ))}
 			</nav>
@@ -127,11 +127,37 @@ nav {
 }
 
 nav a{
+  position: relative;
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 4px;
+  justify-content: center;
+  min-width: 32px;
+  min-height: 28px;
   text-decoration: none;
+}
+
+.category-name {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 50%;
+  z-index: 10;
+  padding: 4px 8px;
+  border-radius: 6px;
+  background: #fff;
+  color: var(--accent-purple);
+  font-size: 13px;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transform: translate(-50%, -4px);
+  transition: opacity 160ms ease, transform 160ms ease, visibility 160ms;
+}
+
+nav a:hover .category-name,
+nav a:focus-visible .category-name {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(-50%, 0);
 }
 
 .site-footer a {
