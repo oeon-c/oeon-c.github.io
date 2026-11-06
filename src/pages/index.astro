@@ -54,21 +54,34 @@ const categories = [
 </html>
 
 <style>
-  :global(*) {
-    box-sizing: border-box;
-  }
+:global(*) {
+  box-sizing: border-box;
+}
 
-  :global(body) {
-    margin: 0;
-    background: #fff;
-    color: #202124;
-    font-family: Arial, "Noto Sans KR", sans-serif;
-    line-height: 1.6;
-  }
+:global(body) {
+  margin: 0;
+  background: #fff;
+  color: #202124;
+  font-family: Arial, "Noto Sans KR", sans-serif;
+  line-height: 1.6;
+}
 
-  :global(a) {
-    color: inherit;
-  }
+:global(a) {
+  color: inherit;
+}
+
+:global(:root) {
+  --accent-purple: #7656c9;
+}
+
+.eyebrow {
+  color: var(--accent-purple);
+}
+
+nav a:hover,
+.site-footer a:hover {
+  color: var(--accent-purple);
+}
 
   .page {
     width: min(100% - 40px, 760px);
