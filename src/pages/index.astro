@@ -138,7 +138,7 @@ nav a{
 
 .category-name {
   position: absolute;
-  top: calc(100% + 8px);
+  top: 50%;
   left: 50%;
   z-index: 10;
   padding: 4px 8px;
@@ -149,7 +149,7 @@ nav a{
   white-space: nowrap;
   opacity: 0;
   visibility: hidden;
-  transform: translate(-50%, -4px);
+  transform: translate(-50%, -50%);
   transition: opacity 160ms ease, transform 160ms ease, visibility 160ms;
 }
 
@@ -162,7 +162,7 @@ nav a:hover .category-name,
 nav a:focus-visible .category-name {
   opacity: 1;
   visibility: visible;
-  transform: translate(-50%, 0);
+  transform: translate(-50%, -50%);
 }
 
 nav a:hover .category-cheese,
@@ -187,6 +187,13 @@ nav a:focus-visible .category-cheese {
   align-items: center;
   text-align: center;
   padding: 80px 0;
+}
+
+.intro h1 {
+  margin: 0;
+  font-size: clamp(36px, 7.5vw, 64px);
+  line-height: 1.15;
+  letter-spacing: -0.04em;
 }
 
 .about {
