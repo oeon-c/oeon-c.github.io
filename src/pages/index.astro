@@ -33,15 +33,15 @@ const categories = [
       <main>
         <section class="intro" aria-labelledby="intro-title">
 			<p class="eyebrow">oeon</p>
-			<h1 id="intro-title">oeon의 블로그</h1>
+			<h1 id="intro-title"><span class="accent-text">oeon</span>의 블로그</h1>
 		  </section>
 
 		  <section class="about" id="about" aria-labelledby="about-title">
 			<p class="eyebrow">ABOUT</p>
-			<h2 id="about-title">안녕하세요, oeon입니다.</h2>
+			<h2 id="about-title">안녕하세요, <span class="accent-text">oeon</span>입니다.</h2>
 			<p>소속: 이화여자대학교</p>
 			<p>전공: 사이버보안/철학</p>
-			<p>닉네임: oeon</p>
+			<p>닉네임: <span class="accent-text">oeon</span></p>
 		  </section>
 	  </main>
 
@@ -75,6 +75,10 @@ const categories = [
 }
 
 .intro .eyebrow {
+  color: var(--accent-purple);
+}
+
+.accent-text {
   color: var(--accent-purple);
 }
 
