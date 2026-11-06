@@ -1,0 +1,226 @@
+---
+import { posts } from "../posts.js";
+---
+
+<section class="post-search" aria-labelledby="search-title">
+  <div class="search-shell">
+    <p class="eyebrow">ALL POSTS</p>
+    <h2 id="search-title">게시글 검색</h2>
+    <p class="search-description">카테고리와 관계없이 제목과 내용에서 찾아요.</p>
+
+    <div class="search-box">
+      <label class="visually-hidden" for="post-search">검색어</label>
+      <input
+        id="post-search"
+        class="search-input"
+        type="search"
+        placeholder="궁금한 내용을 검색해 보세요"
+        autocomplete="off"
+      />
+    </div>
+
+    <p id="search-status" class="search-status" role="status" aria-live="polite">
+      검색어를 입력하면 모든 카테고리의 글을 찾아요.
+    </p>
+
+    <ul class="search-results" aria-label="검색 결과">
+      {posts.map((post) => (
+        <li
+          class="search-result"
+          data-search={`${post.title} ${post.content}`}
+          hidden
+        >
+          <a href={`/${post.categoryId}/#post-${post.slug}`}>
+            {post.isSample && <span class="sample-label">테스트 게시글</span>}
+            <h3>{post.title}</h3>
+            <p>{post.content}</p>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<script>
+  const searchInput = document.querySelector("#post-search");
+  const searchStatus = document.querySelector("#search-status");
+  const searchResults = document.querySelectorAll(".search-result");
+
+  if (searchInput instanceof HTMLInputElement) {
+    searchInput.addEventListener("input", () => {
+      const query = searchInput.value.trim().toLocaleLowerCase();
+      let matchCount = 0;
+
+      searchResults.forEach((result) => {
+        const searchableText = result.getAttribute("data-search")?.toLocaleLowerCase() ?? "";
+        const matches = query.length > 0 && searchableText.includes(query);
+        result.toggleAttribute("hidden", !matches);
+        if (matches) matchCount += 1;
+      });
+
+      if (searchStatus) {
+        searchStatus.textContent = query
+          ? matchCount > 0
+            ? `${matchCount}개의 게시글을 찾았어요.`
+            : "검색 결과가 없어요. 다른 검색어를 입력해 보세요."
+          : "검색어를 입력하면 모든 카테고리의 글을 찾아요.";
+      }
+    });
+  }
+</script>
+
+<style>
+  :global(:root) {
+    --accent-purple: #543e8b;
+  }
+
+  .post-search {
+    position: relative;
+    isolation: isolate;
+    min-height: 82vh;
+    padding: clamp(96px, 15vh, 160px) 24px 120px;
+    overflow: hidden;
+    text-align: center;
+  }
+
+  .search-shell {
+    position: relative;
+    width: min(100%, 760px);
+    margin: 0 auto;
+  }
+
+  .search-shell::before {
+    position: absolute;
+    top: 36px;
+    right: 8%;
+    left: 8%;
+    z-index: -1;
+    height: 170px;
+    border-radius: 50%;
+    background: radial-gradient(ellipse, rgb(127 77 255 / 72%), rgb(127 77 255 / 0%) 72%);
+    content: "";
+    filter: blur(46px);
+  }
+
+  .eyebrow {
+    margin: 0 0 8px;
+    color: var(--accent-purple);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+  }
+
+  h2 {
+    margin: 0;
+    font-size: clamp(28px, 5vw, 40px);
+  }
+
+  .search-description {
+    margin: 8px 0 28px;
+    color: #666;
+  }
+
+  .search-box {
+    position: relative;
+  }
+
+  .search-input {
+    width: 100%;
+    min-height: 72px;
+    padding: 18px 28px;
+    border: 1px solid #9b7ade;
+    border-radius: 999px;
+    background: rgb(255 255 255 / 96%);
+    box-shadow: 0 0 14px rgb(132 91 224 / 52%), 0 0 42px rgb(132 91 224 / 30%);
+    color: #202124;
+    font: inherit;
+    font-size: 18px;
+    outline: none;
+  }
+
+  .search-input:focus-visible {
+    border-color: var(--accent-purple);
+    box-shadow: 0 0 18px rgb(132 91 224 / 72%), 0 0 52px rgb(132 91 224 / 42%);
+  }
+
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    clip-path: inset(50%);
+  }
+
+  .search-status {
+    min-height: 24px;
+    margin: 24px 0 12px;
+    color: #666;
+    font-size: 14px;
+  }
+
+  .search-results {
+    display: grid;
+    gap: 12px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    text-align: left;
+  }
+
+  .search-result[hidden] {
+    display: none;
+  }
+
+  .search-result a {
+    display: block;
+    padding: 18px 20px;
+    border: 1px solid #e9e7ee;
+    border-radius: 14px;
+    background: #fff;
+    text-decoration: none;
+  }
+
+  .search-result a:hover,
+  .search-result a:focus-visible {
+    border-color: #bba7e5;
+  }
+
+  .sample-label {
+    color: var(--accent-purple);
+    font-size: 11px;
+    font-weight: 700;
+  }
+
+  .search-result h3 {
+    margin: 3px 0 4px;
+    font-size: 17px;
+  }
+
+  .search-result p {
+    display: -webkit-box;
+    margin: 0;
+    overflow: hidden;
+    color: #666;
+    font-size: 13px;
+    line-height: 1.5;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+
+  @media (max-width: 520px) {
+    .post-search {
+      min-height: 76vh;
+      padding-right: 20px;
+      padding-left: 20px;
+    }
+
+    .search-input {
+      min-height: 62px;
+      padding: 16px 20px;
+      font-size: 16px;
+    }
+  }
+</style>

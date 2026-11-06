@@ -1,0 +1,118 @@
+---
+import CategoryNav from "./CategoryNav.astro";
+import { posts } from "../posts.js";
+
+const { categoryId, title } = Astro.props;
+const categoryPosts = posts.filter((post) => post.categoryId === categoryId);
+---
+
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={`${title} 카테고리의 글 목록입니다.`} />
+    <title>{title} | oeon의 블로그</title>
+  </head>
+  <body>
+    <CategoryNav />
+    <main class="category-page">
+      <p class="eyebrow">CATEGORY</p>
+      <h1>{title}</h1>
+
+      {categoryPosts.length > 0 ? (
+        <div class="post-list">
+          {categoryPosts.map((post) => (
+            <article class="post-card" id={`post-${post.slug}`}>
+              {post.isSample && <span class="sample-label">테스트 게시글</span>}
+              <h2>{post.title}</h2>
+              <p class="post-preview">{post.content}</p>
+            </article>
+          ))}
+        </div>
+      ) : (
+        <p class="empty-message">아직 게시글이 없습니다.</p>
+      )}
+    </main>
+  </body>
+</html>
+
+<style>
+  :global(*) {
+    box-sizing: border-box;
+  }
+
+  :global(body) {
+    margin: 0;
+    background: #fff;
+    color: #202124;
+    font-family: system-ui, "Noto Sans KR", sans-serif;
+    line-height: 1.6;
+  }
+
+  :global(:root) {
+    --accent-purple: #543e8b;
+  }
+
+  .category-page {
+    width: min(100% - 40px, 760px);
+    min-height: calc(100vh - 76px);
+    margin: 0 auto;
+    padding: 72px 0 100px;
+  }
+
+  .eyebrow {
+    margin: 0 0 8px;
+    color: var(--accent-purple);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+  }
+
+  h1 {
+    margin: 0 0 32px;
+    font-size: clamp(32px, 6vw, 48px);
+    line-height: 1.2;
+  }
+
+  .post-list {
+    border-top: 1px solid #e9e7ee;
+  }
+
+  .post-card {
+    padding: 22px 0;
+    border-bottom: 1px solid #e9e7ee;
+    scroll-margin-top: 28px;
+  }
+
+  .sample-label {
+    color: var(--accent-purple);
+    font-size: 11px;
+    font-weight: 700;
+  }
+
+  h2 {
+    margin: 4px 0 6px;
+    font-size: 18px;
+  }
+
+  .post-preview {
+    display: -webkit-box;
+    margin: 0;
+    overflow: hidden;
+    color: #666;
+    font-size: 14px;
+    line-height: 1.55;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+
+  .empty-message {
+    color: #666;
+  }
+
+  @media (max-width: 520px) {
+    .category-page {
+      padding-top: 48px;
+    }
+  }
+</style>
