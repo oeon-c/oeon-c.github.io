@@ -7,7 +7,6 @@ const categories = [
   { name: "블로그/기술문서", href: "/tech-writing/" },
   { name: "논문/컨퍼런스", href: "/papers/" },
   { name: "공모전/자격증", href: "/contests/" },
-  { name: "맨 위로", href: "#top" },
 ];
 ---
 
@@ -31,6 +30,7 @@ const categories = [
     ))}
   </nav>
 </header>
+<a class="back-to-top" href="#top">맨 위로 ↑</a>
 
 <style>
   :global(:root) {
@@ -81,6 +81,20 @@ const categories = [
 
   .large-cheese {
     font-size: 48px;
+  }
+
+  .back-to-top {
+    position: fixed;
+    right: 24px;
+    bottom: 24px;
+    z-index: 20;
+    color: #555;
+    text-decoration: none;
+  }
+
+  .back-to-top:hover,
+  .back-to-top:focus-visible {
+    color: var(--accent-purple);
   }
 
   .category-name {
