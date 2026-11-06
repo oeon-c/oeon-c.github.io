@@ -1,0 +1,134 @@
+---
+const categories = [
+  { id: "development", name: "개발" },
+  { id: "ctf", name: "CTF/Wargame" },
+  { id: "bug-bounty", name: "Bug Bounty" },
+  { id: "tech-writing", name: "블로그/기술문서" },
+  { id: "papers", name: "논문/컨퍼런스" },
+  { id: "contests", name: "공모전/자격증" },
+];
+---
+
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="배운 것과 관심 있는 주제를 기록하는 블로그입니다."
+    />
+    <title>oeon 블로그</title>
+  </head>
+
+  <body>
+    <div class="page">
+		<header id="top" class="site-header">
+			<nav aria-label="블로그 카테고리">
+			  {categories.map((category) => (
+				<a href={`/${category.id}/`}>{category.name}</a>
+			  ))}
+			</nav>
+		  </header>
+
+      <main>
+        <section class="intro" aria-labelledby="intro-title">
+			<p class="eyebrow">oeon</p>
+			<h1 id="intro-title">oeon의 블로그</h1>
+		  </section>
+
+		  <section class="about" id="about" aria-labelledby="about-title">
+			<p class="eyebrow">ABOUT</p>
+			<h2 id="about-title">안녕하세요, oeon입니다.</h2>
+			<p>소속: 이화여자대학교</p>
+			<p>전공: 사이버보안/철학</p>
+			<p>닉네임: oeon</p>
+		  </section>
+	  </main>
+
+      <footer class="site-footer">
+        <p>© 2026 My Blog</p>
+        <a href="#top">맨 위로 ↑</a>
+      </footer>
+    </div>
+  </body>
+</html>
+
+<style>
+  :global(*) {
+    box-sizing: border-box;
+  }
+
+  :global(body) {
+    margin: 0;
+    background: #fff;
+    color: #202124;
+    font-family: Arial, "Noto Sans KR", sans-serif;
+    line-height: 1.6;
+  }
+
+  :global(a) {
+    color: inherit;
+  }
+
+  .page {
+    width: min(100% - 40px, 760px);
+    margin: 0 auto;
+  }
+
+  .site-header {
+    min-height: 76px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 1px solid #c8c8c8;
+  }
+
+nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px 20px;
+}
+
+nav a{
+  text-decoration: none;
+}
+
+.site-footer a {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 10;
+  text-decoration: none;
+}
+
+.intro {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 80px 0;
+}
+
+.about {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 80px 0;
+}
+
+:global(html) {
+  scroll-behavior: smooth;
+}
+
+@media (max-width: 520px) {
+  .intro,
+  .about {
+    min-height: 100svh;
+    padding: 64px 0;
+  }
+}
+</style>
