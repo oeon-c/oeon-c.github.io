@@ -23,7 +23,7 @@ const categories = [
     <CategoryNav />
     <main class="editor-page">
       <h1>글쓰기</h1>
-      <p class="draft-note">이 화면에서 쓴 글은 자동으로 공개되지 않습니다. 초안은 이 브라우저에 저장되며 Markdown 파일로 내려받을 수 있어요.</p>
+      <p class="draft-note">작성 내용은 이 페이지를 떠나면 삭제됩니다. 보관하려면 Markdown 파일로 내려받으세요.</p>
 
       <label for="post-category">카테고리</label>
       <select id="post-category">
@@ -102,60 +102,40 @@ const categories = [
     }
 
     let activeCategory = categorySelect.value;
-    const draftKey = (category) => 'oeon-blog-draft-' + category;
-
     function updateFolderHint() {
       if (folderHint) folderHint.textContent = 'src/content/posts/' + activeCategory + '/';
     }
 
-    function loadDraft() {
-      try {
-        const draft = JSON.parse(localStorage.getItem(draftKey(activeCategory)) || '{}');
-        titleInput.value = draft.title || '';
-        slugInput.value = draft.slug || '';
-        descriptionInput.value = draft.description || '';
-        bodyInput.value = draft.body || '';
-      } catch {
-        titleInput.value = '';
-        slugInput.value = '';
-        descriptionInput.value = '';
-        bodyInput.value = '';
-      }
-      updateFolderHint();
-      if (status) status.textContent = '이 브라우저에 초안이 자동 저장됩니다.';
+    function clearDraft() {
+      titleInput.value = '';
+      slugInput.value = '';
+      descriptionInput.value = '';
+      bodyInput.value = '';
     }
 
-    function saveDraft() {
-      try {
-        localStorage.setItem(draftKey(activeCategory), JSON.stringify({
-          title: titleInput.value,
-          slug: slugInput.value,
-          description: descriptionInput.value,
-          body: bodyInput.value,
-        }));
-        if (status) status.textContent = '초안을 저장했어요.';
-      } catch {
-        if (status) status.textContent = '브라우저에 저장하지 못했어요. Markdown 파일로 내려받으세요.';
+    try {
+      for (const category of categorySelect.options) {
+        localStorage.removeItem('oeon-blog-draft-' + category.value);
       }
+    } catch {
+      // 저장 공간 접근이 막혀 있어도 글쓰기는 계속 사용할 수 있습니다.
     }
+    updateFolderHint();
+    window.addEventListener('pagehide', clearDraft);
+    window.addEventListener('pageshow', (event) => {
+      if (event.persisted) clearDraft();
+    });
 
     function insertText(text) {
       const start = bodyInput.selectionStart;
       const end = bodyInput.selectionEnd;
       bodyInput.setRangeText(text, start, end, 'end');
       bodyInput.focus();
-      saveDraft();
     }
 
-    loadDraft();
-    titleInput.addEventListener('input', saveDraft);
-    slugInput.addEventListener('input', saveDraft);
-    descriptionInput.addEventListener('input', saveDraft);
-    bodyInput.addEventListener('input', saveDraft);
     categorySelect.addEventListener('change', () => {
-      saveDraft();
       activeCategory = categorySelect.value;
-      loadDraft();
+      updateFolderHint();
     });
 
     imageButton?.addEventListener('click', () => {

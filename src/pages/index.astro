@@ -25,6 +25,7 @@ import PostSearch from "../components/PostSearch.astro";
 			  <h1 id="intro-title"><span class="accent-text">oeon</span>의 블로그</h1>
 			  <button class="cheese-trigger" type="button" aria-expanded="false" aria-controls="hero-search" aria-label="게시글 검색 열기">
 				<span class="cheese-icon" aria-hidden="true">🧀</span>
+				<span class="search-label" aria-hidden="true">Search</span>
 			  </button>
 			</div>
 			<div class="hero-search" id="hero-search" inert>
@@ -116,39 +117,66 @@ import PostSearch from "../components/PostSearch.astro";
   text-decoration: none;
 }
 
-.writer-link:hover,
-.writer-link:focus-visible {
-  text-decoration: underline;
-  text-underline-offset: 4px;
-}
-
 .accent-text {
   color: var(--accent-purple);
 }
 
 .cheese-icon {
-  display: block;
+  display: grid;
+  position: absolute;
+  inset: 0;
+  place-items: center;
   line-height: 1;
   filter: hue-rotate(205deg) saturate(1.5);
+  font-size: 50px;
+  transition: opacity 220ms ease, transform 220ms ease;
 }
 
 .cheese-trigger {
-  margin-top: 90px;
-  padding: 6px;
+  position: relative;
+  width: 156px;
+  height: 68px;
+  margin-top: 52px;
+  padding: 0;
   border: 0;
   background: transparent;
   cursor: pointer;
   transition: margin-top 500ms ease;
 }
 
+.search-label {
+  display: grid;
+  position: absolute;
+  inset: 0;
+  place-items: center;
+  border-radius: 999px;
+  background: #e5d4ff;
+  box-shadow: 0 0 18px rgb(132 91 224 / 75%), 0 0 42px rgb(132 91 224 / 45%);
+  color: #111;
+  font: inherit;
+  font-size: 20px;
+  font-weight: 800;
+  opacity: 0;
+  transform: scale(.85);
+  transition: opacity 220ms ease, transform 220ms ease;
+}
+
+.cheese-trigger:hover .cheese-icon,
+.cheese-trigger:focus-visible .cheese-icon {
+  opacity: 0;
+  transform: scale(.85);
+}
+
+.cheese-trigger:hover .search-label,
+.cheese-trigger:focus-visible .search-label {
+  opacity: 1;
+  transform: scale(1);
+}
+
 .cheese-trigger:focus-visible {
   outline: 2px solid var(--accent-purple);
   outline-offset: 6px;
   border-radius: 8px;
-}
-
-.cheese-icon {
-  font-size: 50px;
 }
 
 .about .eyebrow {
@@ -214,7 +242,7 @@ import PostSearch from "../components/PostSearch.astro";
 }
 
 .intro.search-open .cheese-trigger {
-  margin-top: 52px;
+  margin-top: 28px;
 }
 
 .intro.search-open .hero-search {
@@ -254,6 +282,10 @@ import PostSearch from "../components/PostSearch.astro";
   .hero-heading,
   .cheese-trigger,
   .hero-search {
+    transition: none;
+  }
+  .cheese-icon,
+  .search-label {
     transition: none;
   }
 }
