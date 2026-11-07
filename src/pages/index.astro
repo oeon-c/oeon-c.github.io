@@ -6,6 +6,7 @@ import PostSearch from "../components/PostSearch.astro";
 <html lang="ko">
   <head>
     <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=2" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="description"
@@ -20,7 +21,7 @@ import PostSearch from "../components/PostSearch.astro";
       <main>
         <section class="intro" aria-labelledby="intro-title">
 			<div class="hero-heading">
-			  <p class="eyebrow">oeon</p>
+			  <a class="eyebrow writer-link" href="/write/" aria-label="글쓰기 페이지 열기">oeon</a>
 			  <h1 id="intro-title"><span class="accent-text">oeon</span>의 블로그</h1>
 			  <button class="cheese-trigger" type="button" aria-expanded="false" aria-controls="hero-search" aria-label="게시글 검색 열기">
 				<span class="cheese-icon" aria-hidden="true">🧀</span>
@@ -108,6 +109,17 @@ import PostSearch from "../components/PostSearch.astro";
 
 .intro .eyebrow {
   color: var(--accent-purple);
+}
+
+.writer-link {
+  display: inline-block;
+  text-decoration: none;
+}
+
+.writer-link:hover,
+.writer-link:focus-visible {
+  text-decoration: underline;
+  text-underline-offset: 4px;
 }
 
 .accent-text {

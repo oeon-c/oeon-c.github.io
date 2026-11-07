@@ -13,6 +13,7 @@ const categories = [
 
 <html lang="ko">
   <head>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=2" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content="블로그 글 초안을 작성합니다." />
@@ -30,9 +31,16 @@ const categories = [
           <option value={category.id}>{category.name}</option>
         ))}
       </select>
+      <p class="folder-hint">저장할 위치: <code id="category-folder">src/content/posts/development/</code></p>
 
       <label for="post-title">제목</label>
       <input id="post-title" class="title-input" type="text" placeholder="제목을 입력하세요" />
+
+      <label for="post-slug">글 주소</label>
+      <input id="post-slug" type="text" placeholder="예: my-first-post (영문 소문자, 숫자, 하이픈)" />
+
+      <label for="post-description">짧은 설명</label>
+      <input id="post-description" type="text" placeholder="글 목록에 표시할 설명" />
 
       <div class="toolbar" role="toolbar" aria-label="본문 삽입 도구">
         <button id="insert-image" type="button" aria-label="사진 삽입" title="사진 삽입">
@@ -71,6 +79,9 @@ const categories = [
 <script>
   const categorySelect = document.querySelector('#post-category');
   const titleInput = document.querySelector('#post-title');
+  const slugInput = document.querySelector('#post-slug');
+  const descriptionInput = document.querySelector('#post-description');
+  const folderHint = document.querySelector('#category-folder');
   const bodyInput = document.querySelector('#post-body');
   const status = document.querySelector('#draft-status');
   const imageInput = document.querySelector('#image-file');
@@ -82,6 +93,8 @@ const categories = [
 
   if (categorySelect instanceof HTMLSelectElement &&
       titleInput instanceof HTMLInputElement &&
+      slugInput instanceof HTMLInputElement &&
+      descriptionInput instanceof HTMLInputElement &&
       bodyInput instanceof HTMLTextAreaElement) {
     const requestedCategory = new URLSearchParams(location.search).get('category');
     if (requestedCategory && [...categorySelect.options].some((option) => option.value === requestedCategory)) {
@@ -91,15 +104,24 @@ const categories = [
     let activeCategory = categorySelect.value;
     const draftKey = (category) => 'oeon-blog-draft-' + category;
 
+    function updateFolderHint() {
+      if (folderHint) folderHint.textContent = 'src/content/posts/' + activeCategory + '/';
+    }
+
     function loadDraft() {
       try {
         const draft = JSON.parse(localStorage.getItem(draftKey(activeCategory)) || '{}');
         titleInput.value = draft.title || '';
+        slugInput.value = draft.slug || '';
+        descriptionInput.value = draft.description || '';
         bodyInput.value = draft.body || '';
       } catch {
         titleInput.value = '';
+        slugInput.value = '';
+        descriptionInput.value = '';
         bodyInput.value = '';
       }
+      updateFolderHint();
       if (status) status.textContent = '이 브라우저에 초안이 자동 저장됩니다.';
     }
 
@@ -107,6 +129,8 @@ const categories = [
       try {
         localStorage.setItem(draftKey(activeCategory), JSON.stringify({
           title: titleInput.value,
+          slug: slugInput.value,
+          description: descriptionInput.value,
           body: bodyInput.value,
         }));
         if (status) status.textContent = '초안을 저장했어요.';
@@ -125,6 +149,8 @@ const categories = [
 
     loadDraft();
     titleInput.addEventListener('input', saveDraft);
+    slugInput.addEventListener('input', saveDraft);
+    descriptionInput.addEventListener('input', saveDraft);
     bodyInput.addEventListener('input', saveDraft);
     categorySelect.addEventListener('change', () => {
       saveDraft();
@@ -164,10 +190,22 @@ const categories = [
 
     downloadButton?.addEventListener('click', () => {
       const title = titleInput.value.trim() || '제목 없음';
+      const slug = slugInput.value.trim();
+      if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) {
+        if (status) status.textContent = '글 주소에는 영문 소문자, 숫자, 하이픈을 사용해 주세요.';
+        slugInput.focus();
+        return;
+      }
+      const description = descriptionInput.value.trim() || bodyInput.value.replace(/[#*`>\[\]()_-]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 150);
+      const localDate = new Date();
+      const date = [localDate.getFullYear(), String(localDate.getMonth() + 1).padStart(2, '0'), String(localDate.getDate()).padStart(2, '0')].join('-');
       const markdown = [
         '---',
         'title: ' + JSON.stringify(title),
-        'category: ' + activeCategory,
+        'slug: ' + JSON.stringify(slug),
+        'category: ' + JSON.stringify(activeCategory),
+        'date: ' + JSON.stringify(date),
+        'description: ' + JSON.stringify(description),
         '---',
         '',
         bodyInput.value,
@@ -175,10 +213,10 @@ const categories = [
       const url = URL.createObjectURL(new Blob([markdown], { type: 'text/markdown;charset=utf-8' }));
       const link = document.createElement('a');
       link.href = url;
-      link.download = 'oeon-draft-' + activeCategory + '.md';
+      link.download = slug + '.md';
       link.click();
       setTimeout(() => URL.revokeObjectURL(url), 1000);
-      if (status) status.textContent = 'Markdown 초안을 내려받았어요.';
+      if (status) status.textContent = '다운로드 완료. src/content/posts/' + activeCategory + '/ 폴더에 넣어 주세요.';
     });
   }
 </script>
@@ -200,7 +238,7 @@ const categories = [
   h1 { margin: 0 0 8px; font-size: clamp(32px, 6vw, 48px); }
   .draft-note { margin: 0 0 32px; color: #666; font-size: 14px; }
   label { display: block; margin: 24px 0 8px; font-weight: 700; }
-  select, .title-input, textarea {
+  select, .title-input, #post-slug, #post-description, textarea {
     width: 100%;
     border: 1px solid #d8d3e3;
     border-radius: 12px;
@@ -210,6 +248,8 @@ const categories = [
   }
   select { max-width: 260px; padding: 10px 12px; }
   .title-input { padding: 16px 18px; font-size: 26px; font-weight: 700; }
+  #post-slug, #post-description { padding: 12px 14px; }
+  .folder-hint { margin: 8px 0 0; color: #666; font-size: 13px; }
   textarea {
     min-height: 58vh;
     padding: 20px;

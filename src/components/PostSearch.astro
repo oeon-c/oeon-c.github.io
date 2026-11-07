@@ -1,6 +1,11 @@
 ---
-import { posts } from "../posts.js";
+import { getCollection } from "astro:content";
 const { compact = false } = Astro.props;
+const posts = (await getCollection("posts"))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+const previewText = (post) =>
+  post.data.description ?? post.body.replace(/[#*`>\[\]()_-]/g, " ").replace(/\s+/g, " ").trim();
 ---
 
 <section class:list={["post-search", { compact }]} aria-labelledby="search-title">
@@ -24,13 +29,13 @@ const { compact = false } = Astro.props;
       {posts.map((post) => (
         <li
           class="search-result"
-          data-search={`${post.title} ${post.content}`}
+          data-search={`${post.data.title} ${post.body}`}
           hidden
         >
-          <a href={`/${post.categoryId}/#post-${post.slug}`}>
-            {post.isSample && <span class="sample-label">테스트 게시글</span>}
-            <h3>{post.title}</h3>
-            <p>{post.content}</p>
+          <a href={`/${post.data.slug}/`}>
+            {post.data.isSample && <span class="sample-label">테스트 게시글</span>}
+            <h3>{post.data.title}</h3>
+            <p>{previewText(post)}</p>
           </a>
         </li>
       ))}

@@ -1,28 +1,32 @@
 ---
 import CategoryNav from "../components/CategoryNav.astro";
-import { posts } from "../posts.js";
+import { getCollection, render } from "astro:content";
 
-export function getStaticPaths() {
-  return posts.map((post) => ({ params: { slug: post.slug }, props: { post } }));
+export async function getStaticPaths() {
+  const posts = await getCollection("posts");
+  return posts.map((post) => ({ params: { slug: post.data.slug }, props: { post } }));
 }
 
 const { post } = Astro.props;
+const { Content } = await render(post);
+const description = post.data.description ?? post.body.replace(/[#*`>\[\]()_-]/g, " ").replace(/\s+/g, " ").trim();
 ---
 
 <html lang="ko">
   <head>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=2" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content={post.content.slice(0, 150)} />
-    <title>{post.title} | oeon의 블로그</title>
+    <meta name="description" content={description.slice(0, 150)} />
+    <title>{post.data.title} | oeon의 블로그</title>
   </head>
   <body>
     <CategoryNav />
     <main class="post-page">
-      <a class="back-link" href={`/${post.categoryId}/`}>← 이전</a>
-      <h1>{post.title}</h1>
+      <a class="back-link" href={`/${post.data.category}/`}>← 이전</a>
+      <h1>{post.data.title}</h1>
       <article class="post-body">
-        {post.content.split(/\n\n+/).map((paragraph) => <p>{paragraph}</p>)}
+        <Content />
       </article>
     </main>
   </body>
@@ -72,7 +76,26 @@ const { post } = Astro.props;
     font-size: 17px;
   }
 
-  .post-body p {
+  .post-body :global(p) {
     margin: 0 0 24px;
+  }
+
+  .post-body :global(h2),
+  .post-body :global(h3) {
+    margin: 48px 0 18px;
+    line-height: 1.35;
+  }
+
+  .post-body :global(pre) {
+    padding: 18px;
+    overflow-x: auto;
+    border-radius: 12px;
+    background: #f5f2fa;
+  }
+
+  .post-body :global(img) {
+    max-width: 100%;
+    height: auto;
+    border-radius: 12px;
   }
 </style>
