@@ -86,6 +86,14 @@ const description = post.data.description ?? post.body.replace(/[#*`>\[\]()_-]/g
 
   .post-body :global(p) {
     margin: 0 0 24px;
+    white-space: break-spaces;
+    tab-size: 4;
+  }
+
+  .post-body :global(li),
+  .post-body :global(blockquote) {
+    white-space: break-spaces;
+    tab-size: 4;
   }
 
   .post-body :global(h2),
