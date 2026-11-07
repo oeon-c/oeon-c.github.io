@@ -32,6 +32,14 @@ const description = post.data.description ?? post.body.replace(/[#*`>\[\]()_-]/g
   </body>
 </html>
 
+<script>
+  document.querySelectorAll('.post-body a[href^="/files/"]').forEach((link) => {
+    if (link instanceof HTMLAnchorElement) {
+      link.download = decodeURIComponent(link.pathname.split('/').pop() || 'file');
+    }
+  });
+</script>
+
 <style>
   :global(*) {
     box-sizing: border-box;
@@ -94,8 +102,42 @@ const description = post.data.description ?? post.body.replace(/[#*`>\[\]()_-]/g
   }
 
   .post-body :global(img) {
+    display: block;
     max-width: 100%;
     height: auto;
+    margin: 24px auto;
     border-radius: 12px;
+  }
+
+  .post-body :global(a[href^="/files/"]) {
+    display: inline-flex;
+    min-width: 130px;
+    max-width: 220px;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin: 12px 0 28px;
+    padding: 18px 14px;
+    border: 1px solid #d8c8f3;
+    border-radius: 14px;
+    background: #faf7ff;
+    color: #543e8b;
+    font-size: 14px;
+    line-height: 1.4;
+    text-align: center;
+    overflow-wrap: anywhere;
+    text-decoration: none;
+  }
+
+  .post-body :global(a[href^="/files/"]::before) {
+    width: 42px;
+    height: 52px;
+    background: center / contain no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 42 52'%3E%3Cpath d='M5 2h20l12 12v34a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2Z' fill='%23fff' stroke='%23543e8b' stroke-width='3'/%3E%3Cpath d='M25 2v12h12M10 27h22M10 35h18' fill='none' stroke='%23543e8b' stroke-width='3' stroke-linejoin='round'/%3E%3C/svg%3E");
+    content: "";
+  }
+
+  .post-body :global(a[href^="/files/"]:hover),
+  .post-body :global(a[href^="/files/"]:focus-visible) {
+    box-shadow: 0 0 16px rgb(132 91 224 / 30%);
   }
 </style>
