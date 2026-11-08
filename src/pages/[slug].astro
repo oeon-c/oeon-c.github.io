@@ -2,6 +2,7 @@
 import CategoryNav from "../components/CategoryNav.astro";
 import { getCollection, render } from "astro:content";
 import { postExcerpt } from "../postExcerpt.js";
+import "../styles/fonts.css";
 
 export async function getStaticPaths() {
   const posts = await getCollection("posts");
@@ -79,7 +80,8 @@ const description = postExcerpt(post.body);
     margin: 0;
     background: #fff;
     color: #202124;
-    font-family: system-ui, "Noto Sans KR", sans-serif;
+    font-family: "YUniverse", system-ui, sans-serif;
+    font-weight: 300;
     line-height: 1.7;
   }
 

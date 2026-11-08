@@ -1,0 +1,15 @@
+@font-face {
+  font-family: "YUniverse";
+  src: url("/fonts/YUniverse-L.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "YUniverse";
+  src: url("/fonts/YUniverse-B.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+}

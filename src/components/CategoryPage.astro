@@ -1,6 +1,7 @@
 ---
 import CategoryNav from "./CategoryNav.astro";
 import { getCollection } from "astro:content";
+import "../styles/fonts.css";
 
 const { categoryId, title, page = 1 } = Astro.props;
 const categoryPosts = (await getCollection("posts", ({ data }) => data.category === categoryId))
@@ -71,7 +72,8 @@ const formatDate = (date) => date.toISOString().slice(2, 10).replaceAll("-", "."
     margin: 0;
     background: #fff;
     color: #202124;
-    font-family: system-ui, "Noto Sans KR", sans-serif;
+    font-family: "YUniverse", system-ui, sans-serif;
+    font-weight: 300;
     line-height: 1.6;
   }
 
