@@ -13,3 +13,11 @@
   font-weight: 700;
   font-display: swap;
 }
+
+@font-face {
+  font-family: "OneStoreMobileTitle";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2105_2@1.0/ONE-Mobile-Title.woff") format("woff");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
