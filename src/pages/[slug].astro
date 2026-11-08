@@ -1,6 +1,7 @@
 ---
 import CategoryNav from "../components/CategoryNav.astro";
 import { getCollection, render } from "astro:content";
+import { postExcerpt } from "../postExcerpt.js";
 
 export async function getStaticPaths() {
   const posts = await getCollection("posts");
@@ -9,7 +10,7 @@ export async function getStaticPaths() {
 
 const { post } = Astro.props;
 const { Content } = await render(post);
-const description = post.body.replace(/[#*`>\[\]()_-]/g, " ").replace(/\s+/g, " ").trim();
+const description = postExcerpt(post.body);
 ---
 
 <html lang="ko">
@@ -148,8 +149,7 @@ const description = post.body.replace(/[#*`>\[\]()_-]/g, " ").replace(/\s+/g, " 
     min-width: 0;
     min-height: 70vh;
     padding: 48px clamp(24px, 5vw, 64px);
-    border-radius: 10px;
-    background: #e9eef6;
+    background: radial-gradient(ellipse at center, #e9eef6 34%, #eef2f8 74%, transparent 100%);
     color: #1c2b45;
     font-size: 17px;
   }

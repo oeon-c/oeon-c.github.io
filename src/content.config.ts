@@ -15,7 +15,6 @@ const posts = defineCollection({
       "contests",
     ]),
     date: z.coerce.date(),
-    isSample: z.boolean().default(false),
   }),
 });
 

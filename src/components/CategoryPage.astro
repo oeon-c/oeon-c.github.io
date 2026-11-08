@@ -2,9 +2,13 @@
 import CategoryNav from "./CategoryNav.astro";
 import { getCollection } from "astro:content";
 
-const { categoryId, title } = Astro.props;
+const { categoryId, title, page = 1 } = Astro.props;
 const categoryPosts = (await getCollection("posts", ({ data }) => data.category === categoryId))
-  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf() || b.data.slug.localeCompare(a.data.slug));
+const pageSize = 16;
+const pageCount = Math.ceil(categoryPosts.length / pageSize);
+const visiblePosts = categoryPosts.slice((page - 1) * pageSize, page * pageSize);
+const pageUrl = (number) => number === 1 ? `/${categoryId}/` : `/${categoryId}/${number}/`;
 
 const formatDate = (date) => date.toISOString().slice(2, 10).replaceAll("-", ".");
 
@@ -25,9 +29,9 @@ const formatDate = (date) => date.toISOString().slice(2, 10).replaceAll("-", "."
         <h1>{title}</h1>
       </div>
 
-      {categoryPosts.length > 0 ? (
+      {visiblePosts.length > 0 ? (
         <div class="post-list">
-          {categoryPosts.map((post) => (
+          {visiblePosts.map((post) => (
             <article class="post-card" id={`post-${post.data.slug}`}>
               <a href={`/${post.data.slug}/`}>
                 <span class="document-icon" aria-hidden="true">
@@ -38,13 +42,21 @@ const formatDate = (date) => date.toISOString().slice(2, 10).replaceAll("-", "."
                   </svg>
                 </span>
                 <span class="file-name">{post.data.title}_<time datetime={post.data.date.toISOString().slice(0, 10)}>{formatDate(post.data.date)}</time></span>
-                {post.data.isSample && <span class="sample-label">테스트 게시글</span>}
               </a>
             </article>
           ))}
         </div>
       ) : (
         <p class="empty-message">아직 게시글이 없습니다.</p>
+      )}
+      {pageCount > 1 && (
+        <nav class="pagination" aria-label="글 목록 페이지">
+          {page > 1 && <a href={pageUrl(page - 1)} aria-label="이전 페이지">← 이전</a>}
+          {Array.from({ length: pageCount }, (_, index) => index + 1).map((number) => (
+            <a href={pageUrl(number)} aria-label={`${number}페이지`} aria-current={number === page ? "page" : undefined}>{number}</a>
+          ))}
+          {page < pageCount && <a href={pageUrl(page + 1)} aria-label="다음 페이지">다음 →</a>}
+        </nav>
       )}
     </main>
   </body>
@@ -157,9 +169,27 @@ const formatDate = (date) => date.toISOString().slice(2, 10).replaceAll("-", "."
     overflow-wrap: anywhere;
   }
 
-  .sample-label {
+  .pagination {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 56px;
+  }
+
+  .pagination a {
+    min-width: 36px;
+    padding: 6px 10px;
+    border-radius: 8px;
     color: var(--accent-purple);
-    font-size: 11px;
+    text-align: center;
+    text-decoration: none;
+  }
+
+  .pagination a:hover,
+  .pagination a:focus-visible,
+  .pagination a[aria-current="page"] {
+    background: #eee7fa;
   }
 
   .empty-message {

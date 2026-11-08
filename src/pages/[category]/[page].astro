@@ -1,0 +1,31 @@
+---
+import { getCollection } from "astro:content";
+import CategoryPage from "../../components/CategoryPage.astro";
+
+export async function getStaticPaths() {
+  const categories = [
+    { id: "development", title: "개발" },
+    { id: "ctf", title: "CTF/Wargame" },
+    { id: "bug-bounty", title: "Bug Bounty" },
+    { id: "tech-writing", title: "블로그/기술문서" },
+    { id: "papers", title: "논문/컨퍼런스" },
+    { id: "contests", title: "공모전/자격증" },
+  ];
+  const posts = await getCollection("posts");
+  return categories.flatMap((category) => {
+    const count = posts.filter((post) => post.data.category === category.id).length;
+    const pages = Math.ceil(count / 16);
+    return Array.from({ length: Math.max(0, pages - 1) }, (_, index) => {
+      const page = index + 2;
+      return {
+        params: { category: category.id, page: String(page) },
+        props: { categoryId: category.id, title: category.title, page },
+      };
+    });
+  });
+}
+
+const { categoryId, title, page } = Astro.props;
+---
+
+<CategoryPage categoryId={categoryId} title={title} page={page} />

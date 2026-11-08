@@ -1,11 +1,10 @@
 ---
 import { getCollection } from "astro:content";
+import { postExcerpt } from "../postExcerpt.js";
 const { compact = false } = Astro.props;
 const posts = (await getCollection("posts"))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 
-const previewText = (post) =>
-  post.body.replace(/[#*`>\[\]()_-]/g, " ").replace(/\s+/g, " ").trim();
 ---
 
 <section class:list={["post-search", { compact }]} aria-labelledby="search-title">
@@ -33,9 +32,8 @@ const previewText = (post) =>
           hidden
         >
           <a href={`/${post.data.slug}/`}>
-            {post.data.isSample && <span class="sample-label">테스트 게시글</span>}
             <h3>{post.data.title}</h3>
-            <p>{previewText(post)}</p>
+            <p>{postExcerpt(post.body)}</p>
           </a>
         </li>
       ))}
@@ -208,12 +206,6 @@ const previewText = (post) =>
   .search-result a:hover,
   .search-result a:focus-visible {
     border-color: #bba7e5;
-  }
-
-  .sample-label {
-    color: var(--accent-purple);
-    font-size: 11px;
-    font-weight: 700;
   }
 
   .search-result h3 {
