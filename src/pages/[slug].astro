@@ -91,15 +91,31 @@ const description = postExcerpt(post.body);
   }
 
   .back-link {
-    display: inline-block;
-    margin-bottom: 30px;
+    display: inline-flex;
+    align-items: center;
+    margin-bottom: 28px;
+    padding: 8px 13px;
+    border: 1px solid #ceb9ee;
+    border-radius: 10px;
+    background: #fcfaff;
     color: #543e8b;
+    font-size: 13px;
+    font-weight: 800;
+    line-height: 1.3;
     text-decoration: none;
+    transition: box-shadow 180ms ease, border-color 180ms ease, transform 180ms ease;
   }
 
   .back-link:hover,
   .back-link:focus-visible {
-    text-decoration: underline;
+    border-color: #a780df;
+    box-shadow: 0 0 12px rgb(132 91 224 / 30%);
+    transform: translateY(-2px);
+  }
+
+  .back-link:focus-visible {
+    outline: 2px solid #543e8b;
+    outline-offset: 3px;
   }
 
   h1 {
@@ -252,5 +268,11 @@ const description = postExcerpt(post.body);
     .post-body {
       padding: 32px 24px;
     }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .back-link { transition: none; }
+    .back-link:hover,
+    .back-link:focus-visible { transform: none; }
   }
 </style>
