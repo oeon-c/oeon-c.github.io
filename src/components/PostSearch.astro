@@ -5,7 +5,7 @@ const posts = (await getCollection("posts"))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 
 const previewText = (post) =>
-  post.data.description ?? post.body.replace(/[#*`>\[\]()_-]/g, " ").replace(/\s+/g, " ").trim();
+  post.body.replace(/[#*`>\[\]()_-]/g, " ").replace(/\s+/g, " ").trim();
 ---
 
 <section class:list={["post-search", { compact }]} aria-labelledby="search-title">

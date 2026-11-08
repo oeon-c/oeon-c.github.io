@@ -6,6 +6,8 @@ const { categoryId, title } = Astro.props;
 const categoryPosts = (await getCollection("posts", ({ data }) => data.category === categoryId))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 
+const formatDate = (date) => date.toISOString().slice(2, 10).replaceAll("-", ".");
+
 ---
 
 <html lang="ko">
@@ -35,7 +37,7 @@ const categoryPosts = (await getCollection("posts", ({ data }) => data.category 
                     <path d="M19 43h34M19 53h34M19 63h25" stroke="#9D8DAB" stroke-width="3" stroke-linecap="round" />
                   </svg>
                 </span>
-                <span class="file-name">{post.data.title}_<time datetime={post.data.date.toISOString().slice(0, 10)}>{post.data.date.toISOString().slice(0, 10)}</time></span>
+                <span class="file-name">{post.data.title}_<time datetime={post.data.date.toISOString().slice(0, 10)}>{formatDate(post.data.date)}</time></span>
                 {post.data.isSample && <span class="sample-label">테스트 게시글</span>}
               </a>
             </article>

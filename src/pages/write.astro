@@ -39,9 +39,6 @@ const categories = [
       <label for="post-slug">글 주소</label>
       <input id="post-slug" type="text" placeholder="예: my-first-post (영문 소문자, 숫자, 하이픈)" />
 
-      <label for="post-description">짧은 설명</label>
-      <input id="post-description" type="text" placeholder="글 목록에 표시할 설명" />
-
       <div class="toolbar" role="toolbar" aria-label="본문 삽입 도구">
         <button id="insert-image" type="button" aria-label="사진 삽입" title="사진 삽입">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -81,7 +78,6 @@ const categories = [
   const categorySelect = document.querySelector('#post-category');
   const titleInput = document.querySelector('#post-title');
   const slugInput = document.querySelector('#post-slug');
-  const descriptionInput = document.querySelector('#post-description');
   const folderHint = document.querySelector('#category-folder');
   const bodyInput = document.querySelector('#post-body');
   const status = document.querySelector('#draft-status');
@@ -95,7 +91,6 @@ const categories = [
   if (categorySelect instanceof HTMLSelectElement &&
       titleInput instanceof HTMLInputElement &&
       slugInput instanceof HTMLInputElement &&
-      descriptionInput instanceof HTMLInputElement &&
       bodyInput instanceof HTMLTextAreaElement) {
     const requestedCategory = new URLSearchParams(location.search).get('category');
     if (requestedCategory && [...categorySelect.options].some((option) => option.value === requestedCategory)) {
@@ -110,7 +105,6 @@ const categories = [
     function clearDraft() {
       titleInput.value = '';
       slugInput.value = '';
-      descriptionInput.value = '';
       bodyInput.value = '';
     }
 
@@ -195,7 +189,6 @@ const categories = [
         slugInput.focus();
         return;
       }
-      const description = descriptionInput.value.trim() || bodyInput.value.replace(/[#*`>\[\]()_-]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 150);
       const localDate = new Date();
       const date = [localDate.getFullYear(), String(localDate.getMonth() + 1).padStart(2, '0'), String(localDate.getDate()).padStart(2, '0')].join('-');
       const markdown = [
@@ -204,7 +197,6 @@ const categories = [
         'slug: ' + JSON.stringify(slug),
         'category: ' + JSON.stringify(activeCategory),
         'date: ' + JSON.stringify(date),
-        'description: ' + JSON.stringify(description),
         '---',
         '',
         preserveTabs(bodyInput.value),
@@ -237,7 +229,7 @@ const categories = [
   h1 { margin: 0 0 8px; font-size: clamp(32px, 6vw, 48px); }
   .draft-note { margin: 0 0 32px; color: #666; font-size: 14px; }
   label { display: block; margin: 24px 0 8px; font-weight: 700; }
-  select, .title-input, #post-slug, #post-description, textarea {
+  select, .title-input, #post-slug, textarea {
     width: 100%;
     border: 1px solid #d8d3e3;
     border-radius: 12px;
@@ -247,7 +239,7 @@ const categories = [
   }
   select { max-width: 260px; padding: 10px 12px; }
   .title-input { padding: 16px 18px; font-size: 26px; font-weight: 700; }
-  #post-slug, #post-description { padding: 12px 14px; }
+  #post-slug { padding: 12px 14px; }
   .folder-hint { margin: 8px 0 0; color: #666; font-size: 13px; }
   textarea {
     min-height: 58vh;

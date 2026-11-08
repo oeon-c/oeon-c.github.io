@@ -9,7 +9,7 @@ export async function getStaticPaths() {
 
 const { post } = Astro.props;
 const { Content } = await render(post);
-const description = post.data.description ?? post.body.replace(/[#*`>\[\]()_-]/g, " ").replace(/\s+/g, " ").trim();
+const description = post.body.replace(/[#*`>\[\]()_-]/g, " ").replace(/\s+/g, " ").trim();
 ---
 
 <html lang="ko">
@@ -23,21 +23,44 @@ const description = post.data.description ?? post.body.replace(/[#*`>\[\]()_-]/g
   <body>
     <CategoryNav />
     <main class="post-page">
-      <a class="back-link" href={`/${post.data.category}/`}>← 이전</a>
-      <h1>{post.data.title}</h1>
-      <article class="post-body">
-        <Content />
-      </article>
+      <div class="post-header">
+        <a class="back-link" href={`/${post.data.category}/`}>← 이전</a>
+        <h1>{post.data.title}</h1>
+      </div>
+      <div class="reading-layout">
+        <aside class="file-shelf" aria-label="첨부파일" hidden>
+          <h2>첨부파일</h2>
+          <div class="file-list"></div>
+        </aside>
+        <article class="post-body">
+          <Content />
+        </article>
+      </div>
     </main>
   </body>
 </html>
 
 <script>
-  document.querySelectorAll('.post-body a[href^="/files/"]').forEach((link) => {
-    if (link instanceof HTMLAnchorElement) {
+  const readingLayout = document.querySelector('.reading-layout');
+  const fileShelf = document.querySelector('.file-shelf');
+  const fileList = document.querySelector('.file-list');
+
+  if (readingLayout && fileShelf instanceof HTMLElement && fileList) {
+    document.querySelectorAll('.post-body a[href^="/files/"]').forEach((link) => {
+      if (!(link instanceof HTMLAnchorElement)) return;
       link.download = decodeURIComponent(link.pathname.split('/').pop() || 'file');
+      link.classList.add('attachment-link');
+      const paragraph = link.parentElement;
+      const aloneInParagraph = paragraph?.tagName === 'P' && paragraph.textContent?.trim() === link.textContent?.trim() && paragraph.children.length === 1;
+      fileList.append(link);
+      if (aloneInParagraph) paragraph.remove();
+    });
+
+    if (fileList.children.length > 0) {
+      fileShelf.hidden = false;
+      readingLayout.classList.add('has-files');
     }
-  });
+  }
 </script>
 
 <style>
@@ -54,10 +77,15 @@ const description = post.data.description ?? post.body.replace(/[#*`>\[\]()_-]/g
   }
 
   .post-page {
-    width: min(100% - 40px, 760px);
+    width: min(100% - 40px, 1120px);
     min-height: calc(100vh - 76px);
     margin: 0 auto;
-    padding: 40px 0 100px;
+    padding: 32px 0 100px;
+  }
+
+  .post-header {
+    max-width: 760px;
+    margin: 0 auto;
   }
 
   .back-link {
@@ -73,14 +101,52 @@ const description = post.data.description ?? post.body.replace(/[#*`>\[\]()_-]/g
   }
 
   h1 {
-    margin: 0 0 56px;
+    margin: 0 0 36px;
     font-size: clamp(32px, 6vw, 52px);
     line-height: 1.25;
   }
 
+  .reading-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 760px);
+    justify-content: center;
+    align-items: start;
+  }
+
+  .reading-layout.has-files {
+    grid-template-columns: 180px minmax(0, 760px);
+    gap: 28px;
+  }
+
+  .file-shelf[hidden] {
+    display: none;
+  }
+
+  .file-shelf {
+    position: sticky;
+    top: 104px;
+    max-height: calc(100vh - 124px);
+    overflow-y: auto;
+  }
+
+  .file-shelf h2 {
+    margin: 0 0 14px;
+    color: #666;
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  .file-list {
+    display: grid;
+    gap: 12px;
+  }
+
   .post-body {
-    max-width: 680px;
-    margin: 0 auto;
+    min-width: 0;
+    min-height: 70vh;
+    padding: 48px clamp(24px, 5vw, 64px);
+    border-radius: 10px;
+    background: #fbf8f1;
     font-size: 17px;
   }
 
@@ -117,16 +183,14 @@ const description = post.data.description ?? post.body.replace(/[#*`>\[\]()_-]/g
     border-radius: 12px;
   }
 
-  .post-body :global(a[href^="/files/"]) {
-    display: inline-flex;
-    min-width: 130px;
-    max-width: 220px;
+  .file-list :global(.attachment-link) {
+    display: flex;
+    width: 100%;
     flex-direction: column;
     align-items: center;
     gap: 10px;
-    margin: 12px 0 28px;
-    padding: 18px 14px;
-    border: 1px solid #d8c8f3;
+    padding: 16px 10px;
+    border: 1px solid #e2d8f2;
     border-radius: 14px;
     background: #faf7ff;
     color: #543e8b;
@@ -137,15 +201,35 @@ const description = post.data.description ?? post.body.replace(/[#*`>\[\]()_-]/g
     text-decoration: none;
   }
 
-  .post-body :global(a[href^="/files/"]::before) {
+  .file-list :global(.attachment-link::before) {
     width: 42px;
     height: 52px;
     background: center / contain no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 42 52'%3E%3Cpath d='M5 2h20l12 12v34a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2Z' fill='%23fff' stroke='%23543e8b' stroke-width='3'/%3E%3Cpath d='M25 2v12h12M10 27h22M10 35h18' fill='none' stroke='%23543e8b' stroke-width='3' stroke-linejoin='round'/%3E%3C/svg%3E");
     content: "";
   }
 
-  .post-body :global(a[href^="/files/"]:hover),
-  .post-body :global(a[href^="/files/"]:focus-visible) {
+  .file-list :global(.attachment-link:hover),
+  .file-list :global(.attachment-link:focus-visible) {
     box-shadow: 0 0 16px rgb(132 91 224 / 30%);
+  }
+
+  @media (max-width: 800px) {
+    .reading-layout.has-files {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 20px;
+    }
+
+    .file-shelf {
+      position: static;
+      max-height: none;
+    }
+
+    .file-list {
+      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    }
+
+    .post-body {
+      padding: 32px 24px;
+    }
   }
 </style>
