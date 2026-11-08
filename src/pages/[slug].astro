@@ -35,7 +35,11 @@ const description = postExcerpt(post.body);
             <h1>{post.data.title}</h1>
           </div>
           <article class="post-body">
+            <span class="corner-cheese top-left" aria-hidden="true">🧀</span>
+            <span class="corner-cheese top-right" aria-hidden="true">🧀</span>
             <Content />
+            <span class="corner-cheese bottom-left" aria-hidden="true">🧀</span>
+            <span class="corner-cheese bottom-right" aria-hidden="true">🧀</span>
           </article>
         </div>
       </div>
@@ -146,17 +150,25 @@ const description = postExcerpt(post.body);
   }
 
   .post-body {
+    position: relative;
     min-width: 0;
     min-height: 70vh;
     padding: 48px clamp(24px, 5vw, 64px);
-    background: radial-gradient(ellipse at center, #e9eef6 34%, #eef2f8 74%, transparent 100%);
-    color: #1c2b45;
     font-size: 17px;
   }
 
-  .post-body :global(a) {
-    color: #334d7a;
+  .corner-cheese {
+    position: absolute;
+    font-size: 30px;
+    line-height: 1;
+    filter: hue-rotate(205deg) saturate(1.5);
+    pointer-events: none;
   }
+
+  .top-left { top: 8px; left: 8px; }
+  .top-right { top: 8px; right: 8px; }
+  .bottom-left { bottom: 8px; left: 8px; }
+  .bottom-right { bottom: 8px; right: 8px; }
 
   .post-body :global(p) {
     margin: 0 0 24px;
