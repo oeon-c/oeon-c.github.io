@@ -23,18 +23,20 @@ const description = post.body.replace(/[#*`>\[\]()_-]/g, " ").replace(/\s+/g, " 
   <body>
     <CategoryNav />
     <main class="post-page">
-      <div class="post-header">
-        <a class="back-link" href={`/${post.data.category}/`}>← 이전</a>
-        <h1>{post.data.title}</h1>
-      </div>
       <div class="reading-layout">
         <aside class="file-shelf" aria-label="첨부파일" hidden>
           <h2>첨부파일</h2>
           <div class="file-list"></div>
         </aside>
-        <article class="post-body">
-          <Content />
-        </article>
+        <div class="reading-main">
+          <div class="post-header">
+            <a class="back-link" href={`/${post.data.category}/`}>← 이전</a>
+            <h1>{post.data.title}</h1>
+          </div>
+          <article class="post-body">
+            <Content />
+          </article>
+        </div>
       </div>
     </main>
   </body>
@@ -83,11 +85,6 @@ const description = post.body.replace(/[#*`>\[\]()_-]/g, " ").replace(/\s+/g, " 
     padding: 32px 0 100px;
   }
 
-  .post-header {
-    max-width: 760px;
-    margin: 0 auto;
-  }
-
   .back-link {
     display: inline-block;
     margin-bottom: 30px;
@@ -118,6 +115,10 @@ const description = post.body.replace(/[#*`>\[\]()_-]/g, " ").replace(/\s+/g, " 
     gap: 28px;
   }
 
+  .reading-main {
+    min-width: 0;
+  }
+
   .file-shelf[hidden] {
     display: none;
   }
@@ -126,6 +127,8 @@ const description = post.body.replace(/[#*`>\[\]()_-]/g, " ").replace(/\s+/g, " 
     position: sticky;
     top: 104px;
     max-height: calc(100vh - 124px);
+    margin-top: 120px;
+    margin-left: -28px;
     overflow-y: auto;
   }
 
@@ -146,8 +149,13 @@ const description = post.body.replace(/[#*`>\[\]()_-]/g, " ").replace(/\s+/g, " 
     min-height: 70vh;
     padding: 48px clamp(24px, 5vw, 64px);
     border-radius: 10px;
-    background: #fbf8f1;
+    background: #e9eef6;
+    color: #1c2b45;
     font-size: 17px;
+  }
+
+  .post-body :global(a) {
+    color: #334d7a;
   }
 
   .post-body :global(p) {
@@ -222,6 +230,7 @@ const description = post.body.replace(/[#*`>\[\]()_-]/g, " ").replace(/\s+/g, " 
     .file-shelf {
       position: static;
       max-height: none;
+      margin: 0;
     }
 
     .file-list {
