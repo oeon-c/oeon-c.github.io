@@ -124,10 +124,10 @@ int main(){
 	func(num);
 }
 ```
-1.함수 func()
-<div style = "margin-lef: 1.5rem;">gets()로 buf에 입력을 받지만, 크기 체크를 하지는 않음 -> BOF 취약점 가능성 있음</div>
+<div style = "margin-lef: 1.5rem;">1.함수 func()
+gets()로 buf에 입력을 받지만, 크기 체크를 하지는 않음 -> BOF 취약점 가능성 있음</div>
 
-2.함수 target()
-<div style = "margin-lef: 1.5rem;">setregid()로 권한 상승이 가능하고, system()으로 쉘이 실행됨 -> 그룹 권한을 사용할 수 있어짐</div>
+<div style = "margin-lef: 1.5rem;">2.함수 target()
+setregid()로 권한 상승이 가능하고, system()으로 쉘이 실행됨 -> 그룹 권한을 사용할 수 있어짐</div>
 
 ##### 스택 프레임 분석
