@@ -94,8 +94,10 @@ file sample 명령어 실행을 통해 실행 권한이 있는 파일 sample의 
 Intel 80386: x86 32비트 아키텍처</span>
 => 32 bit architecture, little endian
 </div>
-
-![checksec 명령어 실행 사진](/images/checksec.png)
+<img
+	src="/images/checksec.png"
+	alt="checksec 명령어 실행 사진"
+	style="disply: block; width: 800px; max-width:100%; height: auto; margin: 0 auto;"/>
 실행 파일에 적용된 보안 기법 확인
 <div style = "margin-lef: 1.5rem;">NX NX enabled: 스택 등 비실행 메모리에서 코드 실행 제한<br>PIE No PIE: 실행 파일 코드 주소가 PIE로 무작위화 되지 않음<br>=> stack에 shellcode를 직접 넣어 실행할 수는 없지만, 실행 파일 내부 함수 주소 예측은 가능함
 </div>
@@ -122,10 +124,10 @@ int main(){
 	func(num);
 }
 ```
-1. 함수 func()
+1.함수 func()
 <div style = "margin-lef: 1.5rem;">gets()로 buf에 입력을 받지만, 크기 체크를 하지는 않음 -> BOF 취약점 가능성 있음</div>
 
-2. 함수 target()
+2.함수 target()
 <div style = "margin-lef: 1.5rem;">setregid()로 권한 상승이 가능하고, system()으로 쉘이 실행됨 -> 그룹 권한을 사용할 수 있어짐</div>
 
 ##### 스택 프레임 분석
