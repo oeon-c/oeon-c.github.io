@@ -70,7 +70,7 @@ Stack에 Shellcode 주입 -> Return Address를 shellcode가 위치한 곳의 주
 W^X 정책: 한 메모리 구간 안에 쓰기와 실행 권한은 함께 두지 않는 정책.
 NX bit: W^X 정책을 적용한 하드웨어 기능으로, 특정한 메모리 영역에서 코드 실행을 금지하도록 지정할 수 있다.
 
-#### 코드 재사용 공격
+## 코드 재사용 공격
 1.등장 이유
 NX bit은 공격자가 실행 가능한 영역에 새로운 명령어를 write 하는 것을 막음
 -> 그렇다면? 이미 들어가 있는 코드를 사용해 보기
@@ -78,11 +78,11 @@ NX bit은 공격자가 실행 가능한 영역에 새로운 명령어를 write �
 2.방법
 목표 함수의 주소를 구하고, 취약한 함수의 stack frame에서 Return Address의 공간을 구한 목표 함수의 주소로 덮어쓰기
 
-#### 코드 재사용 공격 - 실습(ret2win)
+### 코드 재사용 공격 - 실습(ret2win)
 ret2win이란?
 : Buffer overflow를 이용해 Return Address를 덮어쓰고, 프로그램에 이미 존재하는 특정 함수를 실행시키는 공격 방식
 
-##### 문제 파일 확인
+#### 문제 파일 확인
 ![ls -l 명령어 실행 사진](/images/ls-l.png)
 ls -l 명령어 실행을 통해 sample이 실행 권한이 있는 파일임을 알 수 있음
 
@@ -99,10 +99,10 @@ Intel 80386: x86 32비트 아키텍처</span>
 	alt="checksec 명령어 실행 사진"
 	style="disply: block; width: 800px; max-width:100%; height: auto; margin: 0 auto;"/>
 실행 파일에 적용된 보안 기법 확인
-<div style = "margin-lef: 1.5rem;">NX NX enabled: 스택 등 비실행 메모리에서 코드 실행 제한<br>PIE No PIE: 실행 파일 코드 주소가 PIE로 무작위화 되지 않음<br>=> stack에 shellcode를 직접 넣어 실행할 수는 없지만, 실행 파일 내부 함수 주소 예측은 가능함
+<div style = "margin-left: 1.5rem;">NX NX enabled: 스택 등 비실행 메모리에서 코드 실행 제한<br>PIE No PIE: 실행 파일 코드 주소가 PIE로 무작위화 되지 않음<br>=> stack에 shellcode를 직접 넣어 실행할 수는 없지만, 실행 파일 내부 함수 주소 예측은 가능함
 </div>
 
-##### sample.c 소스코드 분석
+#### sample.c 소스코드 분석
 ```
 #include<stdio.h>
 #include<stdlib.h>
@@ -124,10 +124,10 @@ int main(){
 	func(num);
 }
 ```
-<div style = "margin-lef: 1.5rem;">1.함수 func()
+<div style = "margin-left: 1.5rem;">1.함수 func()<br>
 gets()로 buf에 입력을 받지만, 크기 체크를 하지는 않음 -> BOF 취약점 가능성 있음</div>
 
-<div style = "margin-lef: 1.5rem;">2.함수 target()
+<div style = "margin-left: 1.5rem;">2.함수 target()<br>
 setregid()로 권한 상승이 가능하고, system()으로 쉘이 실행됨 -> 그룹 권한을 사용할 수 있어짐</div>
 
 ##### 스택 프레임 분석
