@@ -1,7 +1,7 @@
 ---
 title: "[System Hacking] - Buffer overflow, control Hijcking"
 slug: "system-hack-1"
-category: "development"
+category: "tech-writing"
 date: "2026-11-10"
 ---
 
