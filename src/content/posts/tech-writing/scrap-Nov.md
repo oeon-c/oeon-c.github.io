@@ -1,6 +1,6 @@
 ---
 title: "보안이슈 스크랩 - 11월"
-slug: "scrap-Nov"
+slug: "scrap-nov"
 category: "tech-writing"
 date: "2026-11-10"
 ---
