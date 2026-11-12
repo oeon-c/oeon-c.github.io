@@ -16,7 +16,7 @@ date: "2026-11-10"
 #### 발생 원리
 프로그램 내 크기에 제한이 있는 버퍼에 그 크기보다 더 큰 값이 입력으로 들어올 경우 해당 값이 버퍼의 메모리 공간을 넘어가 다른 메모리를 침범(오염) 시키게 된다.
 #### 예시
-```
+```c
 void vuln(){
 	char buf[12];
 	printf("input: ");
@@ -103,7 +103,7 @@ Intel 80386: x86 32비트 아키텍처</span>
 </div>
 
 #### sample.c 소스코드 분석
-```
+```c
 #include<stdio.h>
 #include<stdlib.h>
 
@@ -132,31 +132,33 @@ setregid()로 권한 상승이 가능하고, system()으로 쉘이 실행됨 -> 
 
 #### 스택 프레임 분석
 ![func 분석 사진](/images/disas func.png)
-<div style = "margin-left: 1.5rem;">1. 어디를 분석해야 하는가?<br>
-c 코드를 가지고 파악해 보면, func 함수는 다음과 같은 순서로 진행된다.<br>
+<div style="margin-left: 1.5rem;">1. 어디를 분석해야 하는가?<br>
+c 코드를 가지고 파악해 보면, func 함수는 다음과 같은 순서로 진행된다.</div>
+
 ```mermaid
 graph TD
-	A[20byte 크기의 buf 배열 선언] --> B[printf()로 안내 문구 출력] 
-	B --> C[gets()로 사용자 입력 받기] 
-	C --> D[printf()로 입력받은 문자열 출력] 
-	D --> E[함수 종료]
+    A["20byte 크기의 buf 배열 선언"] --> B["printf()로 안내 문구 출력"]
+    B --> C["gets()로 사용자 입력 받기"]
+    C --> D["printf()로 입력받은 문자열 출력"]
+    D --> E["함수 종료"]
 ```
-</div>
-<div style = "margin-left: 1.5rem;">2. 스택 프레임 분석<br>
-함수 시작 부분
-```
+
+<div style="margin-left: 1.5rem;">2. 스택 프레임 분석<br>
+함수 시작 부분</div>
+
+```asm
 push ebp
 mov ebp, esp
 push ebx
 sub esp, 0x24
 ```
 PIC 주소 계산 - 함수 본문 실행을 위한 준비 작업
-```
+```asm
 call ~ ; 보조 함수. 현재 코드의 실행 위치를 ebx 레지스터에 저장하는 역할이다.
 add ebx, 0x2d93 ; 기준 주소 계산용
 ```
 첫 번째 printf() 호출
-```
+```asm
 sub esp, 0xc
 lea eax, [ebx-0x1ff0] ;"input: " 문자열의 주소를 계산하여 eax에 저장
 push eax ; 저장된 eax의 주소를 printf()로 전달
@@ -164,7 +166,7 @@ call ~ <printf@plt> ; printf() 함수 호출
 add esp, 0x10
 ```
 <span style="color: orange;">gets() 호출</span>
-```
+```asm
 sub esp, 0xc
 lea eax, [ebp-0x1c]
 push eax
@@ -172,7 +174,7 @@ call gets@plt
 add esp,0x10
 ```
 두 번째 printf() 호출
-```
+```asm
 sub esp, 0x8
 lea eax, [ebp-0x1c]
 push eax
@@ -181,17 +183,16 @@ push eax
 call ~ <printf@plt>
 ```
 ESP, EBX 정리
-```
+```asm
 add esp, 0x10
 nop
 mov ebx, DWORD PTR [ebp-0x4]
 ```
 epilogue
-```
+```asm
 leave
 ret
 ```
-</div>
 <div style = "margin-left: 1.5rem;">3. gets()<br>
 이 함수에서 알고 싶은 점: gets()에는 어떤 값이 전달되는가?<br>
 buf[20]은 stack의 어느 주소에 위치하는가?<br>
