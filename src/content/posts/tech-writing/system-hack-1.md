@@ -131,7 +131,7 @@ gets()로 buf에 입력을 받지만, 크기 체크를 하지는 않음 -> BOF �
 setregid()로 권한 상승이 가능하고, system()으로 쉘이 실행됨 -> 그룹 권한을 사용할 수 있어짐</div>
 
 #### 스택 프레임 분석
-![func 분석 사진](/images/disas func.png)
+![func 분석 사진](/images/disas%20func.png)
 <div style="margin-left: 1.5rem;">1. 어디를 분석해야 하는가?<br>
 c 코드를 가지고 파악해 보면, func 함수는 다음과 같은 순서로 진행된다.</div>
 
