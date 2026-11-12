@@ -19,3 +19,39 @@ Binance Warns iPhone Users of Major iOS Flaw that may expose crypto wallet, priv
 Ubuntu 26.10 Adds New Security Protection to curl, Blocking Revoked SSL Certificates
 - the added protection can help the command-line tool reject HTTPS connections that use revoked certificates.
 - The protection closes a gap in how applications check website certificates.
+
+# 11월 13일
+
+# 11월 14일
+
+# 11월 15일
+
+# 11월 16일
+
+# 11월 17일
+
+# 11월 18일
+
+# 11월 19일
+
+# 11월 20일
+
+# 11월 21일
+
+# 11월 22일
+
+# 11월 23일
+
+# 11월 24일
+
+# 11월 25일
+
+# 11월 26일
+
+# 11월 27일
+
+# 11월 28일
+
+# 11월 29일
+
+# 11월 30일
