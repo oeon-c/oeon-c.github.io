@@ -34,6 +34,7 @@ const description = postExcerpt(post.body);
           <div class="post-header">
             <a class="back-link" href={`/${post.data.category}/`}>← 이전</a>
             <h1>{post.data.title}</h1>
+            <button class="pdf-button" type="button">PDF로 저장</button>
           </div>
           <article class="post-body">
             <span class="corner-cheese top-left" aria-hidden="true">🧀</span>
@@ -49,6 +50,9 @@ const description = postExcerpt(post.body);
 </html>
 
 <script>
+  const pdfButton = document.querySelector('.pdf-button');
+  pdfButton?.addEventListener('click', () => window.print());
+
   const readingLayout = document.querySelector('.reading-layout');
   const fileShelf = document.querySelector('.file-shelf');
   const fileList = document.querySelector('.file-list');
@@ -119,6 +123,22 @@ const description = postExcerpt(post.body);
     outline: 2px solid #543e8b;
     outline-offset: 3px;
   }
+
+  .pdf-button {
+    margin: 0 0 28px 12px;
+    padding: 9px 14px;
+    border: 1px solid #d8d3e3;
+    border-radius: 10px;
+    background: #fff;
+    color: #543e8b;
+    font: inherit;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  .pdf-button:hover,
+  .pdf-button:focus-visible { background: #f7f4fb; }
 
   h1 {
     margin: 0 0 36px;
@@ -277,5 +297,18 @@ const description = postExcerpt(post.body);
     .back-link { transition: none; }
     .back-link:hover,
     .back-link:focus-visible { transform: none; }
+  }
+
+  @media print {
+    :global(body) { color: #111; background: #fff; font-size: 11pt; }
+    :global(nav), .back-link, .pdf-button, .file-shelf, .corner-cheese { display: none !important; }
+    .post-page { width: 100%; min-height: 0; margin: 0; padding: 0; }
+    .reading-layout, .reading-layout.has-files { display: block; }
+    .post-body { min-height: 0; padding: 0; font-size: 11pt; }
+    .post-body :global(pre) { white-space: pre-wrap; overflow-wrap: anywhere; background: #f5f5f5; }
+    .post-body :global(img) { max-width: 100%; break-inside: avoid; }
+    .post-body :global(h1), .post-body :global(h2), .post-body :global(h3) { break-after: avoid; }
+    .post-body :global(p), .post-body :global(li), .post-body :global(blockquote) { orphans: 3; widows: 3; }
+    @page { size: A4; margin: 18mm; }
   }
 </style>
