@@ -1,6 +1,6 @@
 ---
 title: "리버싱-sol1.exe"
-slug: "reverse.sol1"
+slug: "reverse-sol1"
 category: "tech-writing"
 date: "2026-11-26"
 ---
