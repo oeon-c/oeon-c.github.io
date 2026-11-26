@@ -143,7 +143,7 @@ mov [ecx+8B0h], eax
 
 ### 캡처 1 — `0x8B0` 필드의 교차 참조
 
-![`0x8B0` 오프셋 교차 참조 결과](images/01-8b0h-occurrences.png)
+![`0x8B0` 오프셋 교차 참조 결과](/images/01-8b0h-occurrences.png)
 
 IDA의 교차 참조 목록에는 다음과 같은 사용 지점이 표시된다.
 
@@ -176,7 +176,7 @@ sub  esp, 8
 
 ### 캡처 2 — `sub_406F8E`의 간접 콜백 호출
 
-![`sub_406F8E`에서 콜백 주소를 읽고 `call eax`로 호출하는 흐름](images/02-callback-dispatch.png)
+![`sub_406F8E`에서 콜백 주소를 읽고 `call eax`로 호출하는 흐름](/images/02-callback-dispatch.png)
 
 명령어별 의미는 다음과 같다.
 
